@@ -1,0 +1,22 @@
+name: EkLine
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+jobs:
+  test-pr-review:
+    if: github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'No EkLine') == false 
+    name: runner / EkLine Reviewer (github-pr-review)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ekline-io/ekline-github-action@v6
+        with:
+          content_dir: ./content/docs
+          ek_token: ${{ secrets.ek_token }}
+          github_token: ${{ secrets.github_token }}
